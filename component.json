@@ -20,7 +20,7 @@
   },
   "triggers": {
     "httpRequestTrigger": {
-      "main": "dist/actions/httpRequestAction.js",
+      "main": "dist/triggers/httpRequestTrigger.js",
       "title": "HTTP Request",
       "fields": {
         "fieldName": {
