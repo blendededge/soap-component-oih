@@ -1,0 +1,39 @@
+{
+  "title": "SOAP Component OIH",
+  "description": "This is the basic SOAP Component for OIH",
+  "buildType": "docker",
+  "actions": {
+    "httpRequestAction": {
+      "main": "dist/actions/httpRequestAction.js",
+      "title": "HTTP request",
+      "fields": {
+        "fieldName": {
+          "label": "",
+          "required": false,
+          "default": ""
+        }
+      },
+      "metadata": {
+        "out": {}
+      }
+    }
+  },
+  "triggers": {
+    "httpRequestTrigger": {
+      "main": "dist/triggers/httpRequestTrigger.js",
+      "title": "HTTP Request",
+      "fields": {
+        "fieldName": {
+          "label": "",
+          "required": false,
+          "default": "",
+          "note": ""
+        }
+      },
+      "type": "polling",
+      "metadata": {
+        "out": {}
+      }
+    }
+  }
+}
