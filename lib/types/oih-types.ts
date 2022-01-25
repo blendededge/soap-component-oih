@@ -20,12 +20,7 @@ export interface Config {
     secretAuthTransform?: string
 }
 
-export interface Auth {
-    type?: string,
-    basic?: Basic | GenericObject,
-    apiKey?: ApiKey | GenericObject,
-    oauth2?: OAuth2 | GenericObject
-}
+
 
 export interface Basic {
     username: string,
@@ -43,6 +38,13 @@ export interface OAuth2 {
 
 export interface OAuth2Keys {
     access_token: string
+}
+
+export type AuthType = Basic | ApiKey | OAuth2 | GenericObject;
+
+export interface Auth<T extends AuthType> {
+    type: string;
+    data: T;
 }
 
 // export type OAuth2Keys = { access_token: string }
