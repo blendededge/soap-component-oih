@@ -43,6 +43,7 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
     const requestUrl = transform(msg, { customMapping: endpointUrl });
 
     const requestData = createSoapEnvelope((xml as string), soapAction, soapHeaders);
+    console.log(JSON.stringify(requestUrl))
 
     try {
       const { data } = await axios.post(requestUrl, requestData, {
@@ -60,7 +61,7 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
     }
 }
 
-function createSoapEnvelope(input: string, action?: string, headers?: Array<string>): string {
+export function createSoapEnvelope(input: string, action?: string, headers?: Array<string>): string {
   let soapHeaders;
   if (headers) {
     soapHeaders = generateSoapHeaders(headers)
@@ -76,7 +77,7 @@ function createSoapEnvelope(input: string, action?: string, headers?: Array<stri
   </soap:Envelope>`;
 }
 
-function generateSoapHeaders(headers: Array<string>): string {
+export function generateSoapHeaders(headers: Array<string>): string {
   return headers.reduce((headerString, currentHeader) => {
       return currentHeader + headerString
   }, '');
@@ -89,7 +90,7 @@ const authTypes = {
   OAUTH2: 'OAuth2',
   };
 
-function getAuthFromSecretConfig(cfg: Config, self: Self) {
+export function getAuthFromSecretConfig(cfg: Config, self: Self) {
   const {
     username, passphrase, key, headerName, accessToken, secretAuthTransform,
   } = cfg;
@@ -128,40 +129,40 @@ function getAuthFromSecretConfig(cfg: Config, self: Self) {
   return returnConfig;
   }
 
-  function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string, headers?: Array<Headers>,): Array<Headers> {
-      const newHeaders = [];
-      if (headers) {
-        newHeaders.push(...headers)
-      }
+export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string, headers?: Array<Headers>,): Array<Headers> {
+    const newHeaders = [];
+    if (headers) {
+      newHeaders.push(...headers)
+    }
 
-      switch (auth.type) {
-        case authTypes.BASIC:
-            newHeaders.push({
-            key: 'Authorization',
-            value: `"Basic ${Buffer.from(
-              `${auth.basic?.username}:${auth.basic?.password}`,
-              'utf8',
-            ).toString('base64')}"`,
-          });
-          break;
-
-        case authTypes.API_KEY:
-            newHeaders.push({
-            key: auth.apiKey?.headerName,
-            value: `"${auth.apiKey?.headerValue}"`,
-          });
-          break;
-
-        case authTypes.OAUTH2:
-          self.logger.trace('auth = %j', auth);
+    switch (auth.type) {
+      case authTypes.BASIC:
           newHeaders.push({
-            key: 'Authorization',
-            value: `"Bearer ${bearerToken}"`,
-          });
-          break;
+          key: 'Authorization',
+          value: `"Basic ${Buffer.from(
+            `${auth.basic?.username}:${auth.basic?.password}`,
+            'utf8',
+          ).toString('base64')}"`,
+        });
+        break;
 
-        default:
-      }
+      case authTypes.API_KEY:
+          newHeaders.push({
+          key: auth.apiKey?.headerName,
+          value: `"${auth.apiKey?.headerValue}"`,
+        });
+        break;
 
-      return newHeaders
-  }
+      case authTypes.OAUTH2:
+        self.logger.trace('auth = %j', auth);
+        newHeaders.push({
+          key: 'Authorization',
+          value: `"Bearer ${bearerToken}"`,
+        });
+        break;
+
+      default:
+    }
+
+    return newHeaders
+}
