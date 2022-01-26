@@ -1,6 +1,5 @@
 import 'mocha';
 import { expect } from 'chai';
-import * as td from 'testdouble';
 import * as nock from 'nock';
 import { processMethod, createSoapEnvelope, generateSoapHeaders, getAuthFromSecretConfig, populateAuthHeaders } from '../lib/util';
 declare const Buffer;
