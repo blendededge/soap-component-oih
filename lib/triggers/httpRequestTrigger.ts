@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { processMethod } from '../util';
-import { Config, GenericObject, Message, Self } from '../types/oih-types';
+import { Config, GenericObject, Message, Self } from '../types/global';
 
-const processTrigger = async (msg: Message, cfg: Config, snapshot: GenericObject): Promise<void> => {
-    const self: Self = this;
+async function processTrigger(this: Self, msg: Message, cfg: Config, snapshot: GenericObject): Promise<void> {
+    const self = this;
     self.logger.debug('msg: ', msg);
     self.logger.debug('cfg: ', cfg);
     self.logger.debug('snapshot :', snapshot);

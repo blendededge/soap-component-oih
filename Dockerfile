@@ -13,6 +13,8 @@ RUN npm install --production
 
 COPY . /usr/src/app
 
+RUN npm run compile
+
 RUN chown -R node:node .
 
 USER node

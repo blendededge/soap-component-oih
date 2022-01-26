@@ -1,7 +1,7 @@
 import * as uuid from 'uuid';
-import { GenericObject, Message } from './types/oih-types';
+import { GenericObject, Message } from './types/global';
 
-function newMessage(data: GenericObject, attachments: GenericObject): Message {
+export function newMessage(data: GenericObject, attachments?: GenericObject): Message {
   const msg = {
     id: uuid.v4(),
     attachments: attachments || {},

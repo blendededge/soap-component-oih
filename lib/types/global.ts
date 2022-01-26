@@ -10,7 +10,9 @@ export interface Message {
 
 export interface Config {
     endpointUrl: string,
-    soapAction: string,
+    soapAction?: string,
+    soapHeaders?: Array<string>,
+    httpHeaders?: Array<Headers>,
     auth?: Auth,
     username?: string,
     passphrase?: string,
@@ -20,11 +22,16 @@ export interface Config {
     secretAuthTransform?: string
 }
 
+export interface Headers {
+    key?: string,
+    value: string
+}
+
 export interface Auth {
     type?: string,
-    basic?: Basic | GenericObject,
-    apiKey?: ApiKey | GenericObject,
-    oauth2?: OAuth2 | GenericObject
+    basic?: Basic,
+    apiKey?: ApiKey
+    oauth2?: OAuth2
 }
 
 export interface Basic {
@@ -44,8 +51,6 @@ export interface OAuth2 {
 export interface OAuth2Keys {
     access_token: string
 }
-
-// export type OAuth2Keys = { access_token: string }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Self = any;
