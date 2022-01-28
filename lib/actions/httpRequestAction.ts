@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import { processMethod } from '../util';
+import { processMethod } from '../soapRequest';
 import { Config, GenericObject, Message, Self } from '../types/global';
 
 async function processAction(this: Self, msg: Message, cfg: Config, snapshot: GenericObject): Promise<void> {

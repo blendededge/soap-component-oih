@@ -1,4 +1,4 @@
-import { Auth, Self, AuthTypes } from './types/global';
+import { Auth, Self, AuthTypes, Headers } from './types/global';
 
 export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string, headers?: Array<Headers>,): Array<Headers> {
     const newHeaders = [];
