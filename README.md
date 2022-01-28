@@ -87,3 +87,6 @@ The secret service can currently support these secret types:
     "data": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <soap:Body>\r\n    <m:WebServiceResponse xmlns:m=\"http://www.sample.com \">\r\n      <m:Result>five hundred </m:Result>\r\n    </m:WebServiceResponse>\r\n  </soap:Body>\r\n</soap:Envelope>"
 }
 ```
+
+## License 
+&copy; Apache-2.0 &copy; [Blended Edge](https://www.blendededge.com)

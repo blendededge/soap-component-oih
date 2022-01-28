@@ -24,7 +24,7 @@ export interface Config {
 
 export interface Headers {
     key?: string,
-    value: string
+    value?: string
 }
 
 export interface Auth {
@@ -50,6 +50,13 @@ export interface OAuth2 {
 
 export interface OAuth2Keys {
     access_token: string
+}
+
+export enum AuthTypes {
+    NO_AUTH = 'No Auth',
+    BASIC = 'Basic Auth',
+    API_KEY = 'API Key Auth',
+    OAUTH2 = 'OAuth2'
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
