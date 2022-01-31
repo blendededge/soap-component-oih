@@ -2,6 +2,7 @@
     "compilerOptions": {
       "declaration": true,
       "importHelpers": true,
+      "moduleResolution": "Node",
       "module": "commonjs",
       "outDir": "dist",
       "rootDir": "lib",
