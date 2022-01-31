@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { createSoapEnvelope, generateSoapHeaders } from '../lib/soap';
+import { createSoapEnvelope, createSoapHeaders } from '../lib/soap';
 
 describe('createSoapEnvelope', () => {
     const input = '<xmlInput><Input></Input></xmlInput>';
@@ -37,12 +37,12 @@ describe('generateSoapHeaders', () => {
     const headers = ['<SOAPHeaderInput></SOAPHeaderInput>', '<SOAPHeaderInput2></SOAPHeaderInput2>'];
 
     it('should generate single header string when provided array', () => {
-        const generatedHeaders = generateSoapHeaders(headers);
+        const generatedHeaders = createSoapHeaders(headers);
         expect(generatedHeaders).to.equal('<SOAPHeaderInput2></SOAPHeaderInput2><SOAPHeaderInput></SOAPHeaderInput>')
     })
 
     it('should return empty string if no headers provided', () => {
-        const generatedHeaders = generateSoapHeaders([]);
+        const generatedHeaders = createSoapHeaders([]);
         expect(generatedHeaders).to.equal('')
     })
 });

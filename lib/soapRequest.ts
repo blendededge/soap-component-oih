@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { newMessage } from './messages';
-import { generateRequest } from './soap';
+import { createRequest } from './soap';
 import { Config, GenericObject, Message, Self } from './types/global';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function processMethod(self: Self, msg: Message, cfg: Config, snapshot?: GenericObject) {
-  const { requestData, requestUrl, formattedHeaders } = generateRequest(cfg, self, msg);
+  const { requestData, requestUrl, formattedHeaders } = createRequest(cfg, self, msg);
 
   try {
     const { data } = await axios.post(requestUrl, requestData, {
