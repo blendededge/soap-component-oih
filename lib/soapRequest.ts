@@ -6,9 +6,6 @@ import { Config, GenericObject, Message, Self } from './types/global';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function processMethod(self: Self, msg: Message, cfg: Config, snapshot?: GenericObject) {
   const { requestData, requestUrl, formattedHeaders } = createRequest(cfg, self, msg);
-  console.log('request data: ', JSON.stringify(requestData))
-  console.log('request URL: ', requestUrl)
-  console.log('headers: ', JSON.stringify(formattedHeaders))
   try {
     const { data } = await axios.post(requestUrl, requestData, {
       headers: formattedHeaders,

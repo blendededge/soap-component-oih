@@ -4,7 +4,7 @@
 if [ -n "$ELASTICIO_NODE_EXCHANGE" ]; then
   # if ELASTICIO_NODE_EXCHANGE present, run latest version of ferryman
   node ./node_modules/@openintegrationhub/ferryman/runGlobal.js
-# check whether ELASTIC_
+# check whether ELASTIC_PUBLISH_MESSAGES_TO is a non-null/non-zero string
 elif [ -n "$ELASTICIO_PUBLISH_MESSAGES_TO" ]; then
   ## if ELASTICIO_PUBLISH_MESSAGES_TO present, run sailor 
   node ./node_modules/elasticio-sailor-nodejs/run.js
