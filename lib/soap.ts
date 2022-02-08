@@ -6,14 +6,14 @@ import { Config, Self, Headers, Auth, Message } from './types/global';
 
 export function createRequest(cfg: Config, self: Self, msg: Message) {
     const { endpointUrl, soapAction, httpHeaders, soapHeaders } = cfg;
-    const xml = msg.data.xml;
+    const xml = process.env.ELASTICIO_PUBLISH_MESSAGES_TO ? msg.body?.xml : msg.data?.xml;
 
     const { auth } = getAuthFromSecretConfig(cfg, self);
     const bearerToken = (auth && auth.oauth2 && auth.oauth2.keys && auth.oauth2.keys.access_token ? auth.oauth2.keys.access_token : '');
 
-    const requestHeaders = createRequestHeaders(bearerToken, soapAction, auth, httpHeaders);
+    const requestHeaders = createRequestHeaders(self, bearerToken, soapAction, auth, httpHeaders);
     const formattedHeaders = formatHeaders(requestHeaders);
-    self.logger.info(`Formatted request headers: ${formattedHeaders}`);
+    self.logger.info(`Formatted request headers: ${JSON.stringify(formattedHeaders)}`);
 
     const requestUrl = transform(msg, { customMapping: endpointUrl });
     self.logger.info(`Request URL after transformation: ${requestUrl}`);
@@ -27,7 +27,7 @@ export function createRequest(cfg: Config, self: Self, msg: Message) {
     }
 }
 
-function createRequestHeaders(bearerToken: string, soapAction?: string, auth?: Auth, httpHeaders?: Headers[]) {
+function createRequestHeaders(self: Self, bearerToken: string, soapAction?: string, auth?: Auth, httpHeaders?: Headers[]) {
     let requestHeaders: Headers[] = [];
     if (auth) {
         requestHeaders = populateAuthHeaders(auth, self, bearerToken, httpHeaders);

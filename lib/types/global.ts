@@ -3,9 +3,10 @@ export type GenericObject = Record<string, unknown>;
 export interface Message {
     id: string,
     attachments: GenericObject,
-    data: GenericObject,
+    data?: GenericObject,
     headers: GenericObject,
     metadata: GenericObject,
+    body?: GenericObject
 }
 
 export interface Config {
