@@ -35,7 +35,7 @@ function createRequestHeaders(self: Self, bearerToken: string, soapAction?: stri
 
     if (soapAction) {
         requestHeaders.push({
-          key: 'soapaction',
+          key: 'SOAPAction',
           value: soapAction
         });
     }
