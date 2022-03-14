@@ -1,6 +1,6 @@
 # SOAP Component OIH
 
-The **SOAP component** is a component that allows you to connect to any SOAP web service without programming your own components. It expects an input already in XML format, located on the `xml` property of the incoming message and returns the response in XML format. See "Configuration Examples" for an example input and output message.
+The **SOAP component** is a component that allows you to connect to any SOAP web service without programming your own components. It expects an input already in XML format, located on the `xmlString` property of the incoming message and returns the response in XML format. See "Configuration Examples" for an example input and output message.
 
 The SOAP component will perform a single HTTP call when executed. Incoming message data gets used to configure the API call made. The response from the API call will be the output message.
 
@@ -78,7 +78,7 @@ The secret service can currently support these secret types:
 **Incoming Message**
 ```json
 {
-    "xml": "<ExampleSoapBody><MustBeInXML></MustBeInXML></ExampleSoapBody>"
+    "xmlString": "<ExampleSoapBody><MustBeInXML></MustBeInXML></ExampleSoapBody>"
 }
 ```
 **Output Message** 
