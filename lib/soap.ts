@@ -35,7 +35,7 @@ function createRequestHeaders(self: Self, bearerToken: string, soapAction?: stri
 
     if (soapAction) {
         requestHeaders.push({
-          key: 'soapaction',
+          key: 'SOAPAction',
           value: soapAction
         });
     }
@@ -68,6 +68,7 @@ export function createSoapEnvelope(input: string, action?: string, headers?: Arr
     if (headers) {
         soapHeaders = createSoapHeaders(headers)
     }
+    const body = input.replace('<?xml version="1.0" encoding="utf-8"?>', '');
 
     return `<?xml version="1.0" encoding="utf-8"?>
     <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
@@ -75,7 +76,7 @@ export function createSoapEnvelope(input: string, action?: string, headers?: Arr
     ${action ? `<SOAPAction>${action}</SOAPAction>` : ''}
     ${soapHeaders ? soapHeaders : ''}
     </soap:Header>
-    <soap:Body>${input}</soap:Body>
+    <soap:Body>${body}</soap:Body>
     </soap:Envelope>`;
 }
 
