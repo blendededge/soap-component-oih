@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { newMessage } from './messages';
 import { createRequest } from './soap';
 import { Config, GenericObject, Message, Self } from './types/global';
@@ -15,8 +15,14 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
     await self.emit('data', msg);
     await self.emit('end');
   } catch (e) {
-    self.logger.info('Error while making request to SOAP Client: ', (e as Error).message);
-    await self.emit('error', e);
-    await self.emit('end');
+    self.logger.info('Error while making request to SOAP Client: ', (e as AxiosError).message);
+    if (cfg.dontThrowErrorFlag) {
+      const msg = newMessage({ errorMessage: (e as AxiosError).message, errorName: (e as AxiosError).name, originalRequest: (e as AxiosError).config.data });
+      await self.emit('data', msg);
+      await self.emit('end');
+    } else {
+      await self.emit('error', e);
+      await self.emit('end');
+    }
   }
 }

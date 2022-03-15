@@ -23,6 +23,8 @@ The following is a complete list of configuration fields that are available on t
 
 - **`soapHeaders`** - Any additional headers needed for your SOAP envelope go in this field. `soapHeaders` accepts an array of strings. 
 
+- **`dontThrowErrorFlag`** - If set, error messages will be sent to the next step rather than erroring. Defaults to false.
+
 ## Authorization {#authorization}
 
 To use the SOAP component with any restricted access API, provide the authorization credentials directly into the component or use the secret service to inject them into the request at runtime. 

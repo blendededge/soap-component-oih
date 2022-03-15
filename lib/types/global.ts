@@ -21,6 +21,7 @@ export interface Config {
     headerName?: string,
     accessToken?: string,
     secretAuthTransform?: string
+    dontThrowErrorFlag?: string
 }
 
 export interface Headers {
