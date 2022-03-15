@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { newMessage } from './messages';
 import { createRequest } from './soap';
 import { Config, GenericObject, Message, Self } from './types/global';
@@ -16,7 +16,20 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
     await self.emit('end');
   } catch (e) {
     self.logger.info('Error while making request to SOAP Client: ', (e as Error).message);
-    await self.emit('error', e);
-    await self.emit('end');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (cfg.dontThrowErrorFlag && (e as any).config) {
+      const err = (e as AxiosError);
+      const msg = newMessage({ errorMessage: err.message, errorName: err.name, originalRequest: err.config.data });
+      await self.emit('data', msg);
+      await self.emit('end');
+    } else if (cfg.dontThrowErrorFlag) {
+      const err = (e as Error);
+      const msg = newMessage({ errorMessage: err.message, errorName: err.name });
+      await self.emit('data', msg);
+      await self.emit('end');
+    } else {
+      await self.emit('error', e);
+      await self.emit('end');
+    }
   }
 }
