@@ -81,7 +81,7 @@ export function createSoapEnvelope(input: string, action?: string, headers?: Arr
     }
 
     return `<?xml version="1.0" encoding="utf-8"?>
-    <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ${namespaces}>
+    <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ${namespaces ? namespaces : ''}>
     <soap:Header>
     ${action ? `<SOAPAction>${action}</SOAPAction>` : ''}
     ${soapHeaders ? soapHeaders : ''}
