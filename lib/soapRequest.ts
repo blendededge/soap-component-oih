@@ -11,7 +11,7 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
       headers: formattedHeaders,
     });
 
-    const msg = newMessage(data);
+    const msg = newMessage({ response: data });
     await self.emit('data', msg);
     await self.emit('end');
   } catch (e) {
