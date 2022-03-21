@@ -25,6 +25,19 @@ The following is a complete list of configuration fields that are available on t
 
 - **`dontThrowErrorFlag`** - If set, error messages will be sent to the next step rather than erroring. Defaults to false.
 
+- **`namespaces`** - An array of objects with `name` and `url`. This allows you to add additional namespaces to the SOAP envelope. Ex:
+```
+config
+{
+    "fields": {
+        "namespaces": [ { name: "myName", "url": "http://test.url" } ]
+    }
+}
+
+envelope
+<soap:Envelope xmlns:myName="http://test.url">
+```
+
 ## Authorization {#authorization}
 
 To use the SOAP component with any restricted access API, provide the authorization credentials directly into the component or use the secret service to inject them into the request at runtime. 

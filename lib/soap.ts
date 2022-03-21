@@ -2,7 +2,7 @@ import { AxiosRequestHeaders } from 'axios';
 import { populateAuthHeaders } from './http';
 import { getAuthFromSecretConfig } from './secret';
 import { transform } from '@openintegrationhub/ferryman';
-import { Config, Self, Headers, Auth, Message } from './types/global';
+import { Config, Self, Headers, Auth, Message, Namespace } from './types/global';
 
 export function createRequest(cfg: Config, self: Self, msg: Message) {
     const { endpointUrl, soapAction, httpHeaders, soapHeaders } = cfg;
@@ -11,13 +11,14 @@ export function createRequest(cfg: Config, self: Self, msg: Message) {
     const { auth } = getAuthFromSecretConfig(cfg, self);
     const bearerToken = (auth && auth.oauth2 && auth.oauth2.keys && auth.oauth2.keys.access_token ? auth.oauth2.keys.access_token : '');
 
+    const namespaces = addCustomNamespaces(cfg.namespaces);
     const requestHeaders = createRequestHeaders(self, bearerToken, soapAction, auth, httpHeaders);
     const formattedHeaders = formatHeaders(requestHeaders);
     self.logger.info(`Formatted request headers: ${JSON.stringify(formattedHeaders)}`);
 
     const requestUrl = transform(msg, { customMapping: endpointUrl });
     self.logger.info(`Request URL after transformation: ${requestUrl}`);
-    const requestData = createSoapEnvelope((xml as string), soapAction, soapHeaders);
+    const requestData = createSoapEnvelope((xml as string), soapAction, soapHeaders, namespaces);
     self.logger.info(`Soap Envelope: ${requestData}`);
 
     return {
@@ -63,20 +64,29 @@ function formatHeaders(requestHeaders: Headers[]) {
     return formattedHeaders
 }
 
-export function createSoapEnvelope(input: string, action?: string, headers?: Array<string>): string {
+function addCustomNamespaces(namespaces?: Namespace[]) {
+    let namespaceString = '';
+    if (namespaces) {
+        namespaces.forEach(namespace => {
+            namespaceString += `xmlns:${namespace.name}="${namespace.url}" `;
+        });
+    }
+    return namespaceString;
+}
+
+export function createSoapEnvelope(input: string, action?: string, headers?: Array<string>, namespaces?: string): string {
     let soapHeaders;
     if (headers) {
         soapHeaders = createSoapHeaders(headers)
     }
-    const body = input.replace('<?xml version="1.0" encoding="utf-8"?>', '');
 
     return `<?xml version="1.0" encoding="utf-8"?>
-    <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+    <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ${namespaces ? namespaces : ''}>
     <soap:Header>
     ${action ? `<SOAPAction>${action}</SOAPAction>` : ''}
     ${soapHeaders ? soapHeaders : ''}
     </soap:Header>
-    <soap:Body>${body}</soap:Body>
+    <soap:Body>${input}</soap:Body>
     </soap:Envelope>`;
 }
 

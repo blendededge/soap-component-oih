@@ -22,6 +22,12 @@ export interface Config {
     accessToken?: string,
     secretAuthTransform?: string
     dontThrowErrorFlag?: string
+    namespaces?: Namespace[];
+}
+
+export interface Namespace {
+    name: string;
+    url: string;
 }
 
 export interface Headers {
