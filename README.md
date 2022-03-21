@@ -25,6 +25,8 @@ The following is a complete list of configuration fields that are available on t
 
 - **`dontThrowErrorFlag`** - If set, error messages will be sent to the next step rather than erroring. Defaults to false.
 
+- **`saveReceivedData`** - If set, incoming message will be saved and returned with API response
+
 - **`namespaces`** - An array of objects with `name` and `url`. This allows you to add additional namespaces to the SOAP envelope. Ex:
 ```
 config

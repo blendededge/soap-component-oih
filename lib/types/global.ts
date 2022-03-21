@@ -23,6 +23,7 @@ export interface Config {
     secretAuthTransform?: string
     dontThrowErrorFlag?: string
     namespaces?: Namespace[];
+    saveReceivedData?: boolean
 }
 
 export interface Namespace {
