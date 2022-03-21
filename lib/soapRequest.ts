@@ -11,9 +11,14 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
       headers: formattedHeaders,
     });
 
-    const msg = newMessage(data);
-    await self.emit('data', msg);
-    await self.emit('end');
+    if (cfg.saveReceivedData) {
+      const response = process.env.ELASTICIO_PUBLISH_MESSAGES_TO ? { data, receivedData: msg.body } : { data, receivedData: msg.data }
+      await self.emit('data', newMessage(response));
+      await self.emit('end');
+    } else {
+      await self.emit('data', newMessage(data));
+      await self.emit('end');
+    }
   } catch (e) {
     self.logger.info('Error while making request to SOAP Client: ', (e as Error).message);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
