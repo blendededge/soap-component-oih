@@ -12,7 +12,8 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
     });
 
     if (cfg.saveReceivedData) {
-      await self.emit('data', newMessage({ data, receivedData: msg.body }));
+      const response = process.env.ELASTICIO_PUBLISH_MESSAGES_TO ? { data, receivedData: msg.body } : { data, receivedData: msg.data }
+      await self.emit('data', newMessage(response));
       await self.emit('end');
     } else {
       await self.emit('data', newMessage(data));
