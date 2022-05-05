@@ -26,7 +26,7 @@
   "dependencies": {
     "@openintegrationhub/ferryman": "^2.1.0",
     "@openintegrationhub/ferryman-1-7-0": "npm:@openintegrationhub/ferryman@^1.7.1",
-    "axios": "^0.25.0",
+    "axios": "^0.27.2",
     "elasticio-sailor-nodejs": "2.6.7"
   },
   "devDependencies": {
