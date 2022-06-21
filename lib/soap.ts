@@ -6,7 +6,7 @@ import { Config, Self, Headers, Auth, Message, Namespace } from './types/global'
 
 export function createRequest(cfg: Config, self: Self, msg: Message) {
     const { endpointUrl, soapAction, httpHeaders, soapHeaders } = cfg;
-    const xml = process.env.ELASTICIO_PUBLISH_MESSAGES_TO ? msg.body?.xmlString : msg.data?.xmlString;
+    const xml = msg.data?.xmlString;
 
     const { auth } = getAuthFromSecretConfig(cfg, self);
     const bearerToken = (auth && auth.oauth2 && auth.oauth2.keys && auth.oauth2.keys.access_token ? auth.oauth2.keys.access_token : '');

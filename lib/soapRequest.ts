@@ -12,7 +12,7 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
     });
 
     if (cfg.saveReceivedData) {
-      const response = process.env.ELASTICIO_PUBLISH_MESSAGES_TO ? { data, receivedData: msg.body } : { data, receivedData: msg.data }
+      const response = { data, receivedData: msg.data };
       await self.emit('data', newMessage(response));
       await self.emit('end');
     } else {
