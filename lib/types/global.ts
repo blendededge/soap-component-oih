@@ -26,6 +26,7 @@ export interface Config {
     saveReceivedData?: boolean;
     enableRebound?: boolean;
     httpReboundErrorCodes?: number[];
+    rateLimitInMs?: number;
 }
 
 export interface Namespace {
@@ -68,6 +69,16 @@ export enum AuthTypes {
     BASIC = 'Basic Auth',
     API_KEY = 'API Key Auth',
     OAUTH2 = 'OAuth2'
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type LoggerFunction = (...params: any) => void;
+
+export interface Logger {
+    log: LoggerFunction;
+    info: LoggerFunction;
+    debug: LoggerFunction;
+    trace: LoggerFunction;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
