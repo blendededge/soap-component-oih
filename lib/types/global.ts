@@ -23,7 +23,9 @@ export interface Config {
     secretAuthTransform?: string
     dontThrowErrorFlag?: string
     namespaces?: Namespace[];
-    saveReceivedData?: boolean
+    saveReceivedData?: boolean;
+    enableRebound?: boolean;
+    httpReboundErrorCodes?: number[];
 }
 
 export interface Namespace {
