@@ -17,11 +17,13 @@ The following is a complete list of configuration fields that are available on t
 
 - **`dontThrowErrorFlag`** - If set, error messages will be sent to the next step rather than erroring. Defaults to false.
 
+- **`enableRebound`** - If set to `true` it will rebound http response codes 408, 423, 429, 500, 502, 503, 504 as well as DNS lookup timeouts. Defaults to `false`.
+
 - **`endpointUrl`** - A JSONata expression that executes against the message passed into the component to define the URL for the HTTP request. Hint: To hardcode a static URL, simply wrap it in single quotes to make it a basic JSONata expression
 
-
-
 - **`httpHeaders`** - An array of objects with `key` and `value` as the only properties on each. `key` is used to store the header name and `value` its value
+
+- **`httpReboundErrorCodes`** - An array of numbers representing http status codes to rebound on if `enableRebound` is set to `true`. Will override the default http response codes.
 
 - **`namespaces`** - An array of objects with `name` and `url`. This allows you to add additional namespaces to the SOAP envelope. Ex:
     ```
@@ -39,7 +41,6 @@ The following is a complete list of configuration fields that are available on t
 - **`saveReceivedData`** - If set, incoming message will be saved and returned with API response
 
 - **`soapAction`** - The action you would like to take on the SOAP web service. If provided, this action is automatically added to the SOAP envelope headers.
-
 
 - **`soapHeaders`** - Any additional headers needed for your SOAP envelope go in this field. `soapHeaders` accepts an array of strings.
 
