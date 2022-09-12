@@ -37,6 +37,7 @@ The following is a complete list of configuration fields that are available on t
     envelope
     <soap:Envelope xmlns:myName="http://test.url">
     ```
+- **`rateLimitInMs`** - The amount of time, in milliseconds, to wait before executing the next request on this pod. Defaults to `0`.
 
 - **`saveReceivedData`** - If set, incoming message will be saved and returned with API response
 
