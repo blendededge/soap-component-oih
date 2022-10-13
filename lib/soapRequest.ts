@@ -19,7 +19,7 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
     const { data } = await axios.post(requestUrl, requestData, {
       headers: formattedHeaders,
     });
-    self.logger.info(`Response: ${data}`);
+    self.logger.debug(`Response: ${data}`);
     if (cfg.saveReceivedData) {
       const response = process.env.ELASTICIO_PUBLISH_MESSAGES_TO ? { data, receivedData: msg.body } : { data, receivedData: msg.data }
       await self.emit('data', newMessage(response));
