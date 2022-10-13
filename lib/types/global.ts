@@ -21,7 +21,7 @@ export interface Config {
     headerName?: string,
     accessToken?: string,
     secretAuthTransform?: string
-    dontThrowErrorFlag?: string
+    dontThrowErrorFlag?: boolean
     namespaces?: Namespace[];
     saveReceivedData?: boolean;
     enableRebound?: boolean;

@@ -5,7 +5,7 @@ import { Config, GenericObject, Message, Self } from '../types/global';
 
 async function processTrigger(this: Self, msg: Message, cfg: Config, snapshot: GenericObject): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const self = wrapper(this, msg as any, cfg, snapshot);
+    const self = wrapper(this, msg as any, cfg);
     self.logger.debug('msg: ', msg);
     self.logger.debug('cfg: ', cfg);
     self.logger.debug('snapshot :', snapshot);
