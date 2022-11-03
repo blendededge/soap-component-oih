@@ -3,6 +3,7 @@ import { populateAuthHeaders } from './http';
 import { getAuthFromSecretConfig } from './secret';
 import { transform } from '@openintegrationhub/ferryman';
 import { Config, Self, Headers, Auth, Message, Namespace } from './types/global';
+import * as xml2js from 'xml2js';
 
 export function createRequest(cfg: Config, self: Self, msg: Message) {
     const { endpointUrl, soapAction, httpHeaders, soapHeaders } = cfg;
@@ -94,4 +95,24 @@ export function createSoapHeaders(headers: Array<string>): string {
     return headers.reduce((headerString, currentHeader) => {
         return currentHeader + headerString
     }, '');
+}
+
+export async function checkForFault(data: string, faultTransform?: string): Promise<boolean> {
+    const parserConfig = {
+        trim: false,
+        normalize: false,
+        normalizeTags: false,
+        attrkey: '_attr',
+        tagNameProcessors: [
+          (name: string) => name.replace(':', '-'),
+        ],
+    };
+    const parser = new xml2js.Parser(parserConfig);
+    let xml = await parser.parseStringPromise(data);
+
+    if (faultTransform) {
+        xml = transform(xml)
+    }
+
+    return xml['soap-Envelope'] && xml['soap-Envelope']['soap-Fault'];
 }

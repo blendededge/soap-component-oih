@@ -1,8 +1,9 @@
 import axios, { AxiosError } from 'axios';
 import { rateLimit } from './helper';
 import { newMessage } from './messages';
-import { createRequest } from './soap';
-import { Config, GenericObject, Message, Self } from './types/global';
+import { checkForFault, createRequest } from './soap';
+import { Config, GenericObject, Message, Self, SOAPFault } from './types/global';
+
 
 const DEFAULT_HTTP_ERROR_CODE_REBOUND = new Set([408, 423, 429, 500, 502, 503, 504]);
 
@@ -20,18 +21,27 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
       headers: formattedHeaders,
     });
     self.logger.debug(`Response: ${data}`);
-    if (cfg.saveReceivedData) {
-      const response = process.env.ELASTICIO_PUBLISH_MESSAGES_TO ? { data, receivedData: msg.body } : { data, receivedData: msg.data }
-      await self.emit('data', newMessage(response));
-      await emitEnd(self, rateLimitDelay);
-      return;
+    const faultExists = await checkForFault(data, cfg.faultTransform);
+
+    if (faultExists) {
+      throw new SOAPFault('SOP Fault detected', data);
     }
 
-    await self.emit('data', newMessage(data));
+    let response;
+    if (cfg.saveReceivedData && process.env.ELASTICIO_PUBLISH_MESSAGES_TO) {
+      response = { data, receivedData: msg.body }
+    } else if (cfg.saveReceivedData) {
+      response = { data, receivedData: msg.data }
+    } else {
+      response = data;
+    }
+
+    await self.emit('data', newMessage(response));
     await emitEnd(self, rateLimitDelay);
     return;
   } catch (e) {
     self.logger.info('Error while making request to SOAP Client: ', (e as Error).message);
+    console.log(JSON.stringify(e))
     const reboundErrorCodes = cfg.httpReboundErrorCodes ? new Set(cfg.httpReboundErrorCodes) : DEFAULT_HTTP_ERROR_CODE_REBOUND;
     const err = e as AxiosError & { message?: string };
     const { response, message = '', config } = err;
