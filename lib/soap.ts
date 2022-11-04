@@ -97,22 +97,23 @@ export function createSoapHeaders(headers: Array<string>): string {
     }, '');
 }
 
-export async function checkForFault(data: string, faultTransform?: string): Promise<boolean> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function checkForTransformResponse(data: string, faultTransform?: string): Promise<false | Record<string, any>> {
+    if (!faultTransform) {
+        return false;
+    }
     const parserConfig = {
         trim: false,
         normalize: false,
         normalizeTags: false,
         attrkey: '_attr',
         tagNameProcessors: [
-          (name: string) => name.replace(':', '-'),
+            (name: string) => name.replace(':', '-'),
         ],
     };
     const parser = new xml2js.Parser(parserConfig);
-    let xml = await parser.parseStringPromise(data);
+    const xml = await parser.parseStringPromise(data);
 
-    if (faultTransform) {
-        xml = transform(xml)
-    }
-
-    return xml['soap-Envelope'] && xml['soap-Envelope']['soap-Fault'];
+    const transformedJson = transform(xml, { customMapping: faultTransform } );
+    return transformedJson;
 }
