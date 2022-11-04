@@ -1,9 +1,8 @@
 import axios, { AxiosError } from 'axios';
 import { rateLimit } from './helper';
 import { newMessage } from './messages';
-import { checkForFault, createRequest } from './soap';
-import { Config, GenericObject, Message, Self, SOAPFault } from './types/global';
-
+import { checkForTransformResponse, createRequest } from './soap';
+import { Config, GenericObject, Message, Self } from './types/global';
 
 const DEFAULT_HTTP_ERROR_CODE_REBOUND = new Set([408, 423, 429, 500, 502, 503, 504]);
 
@@ -21,17 +20,15 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
       headers: formattedHeaders,
     });
     self.logger.debug(`Response: ${data}`);
-    const faultExists = await checkForFault(data, cfg.faultTransform);
-
-    if (faultExists) {
-      throw new SOAPFault('SOP Fault detected', data);
-    }
+    const transformedResponse = await checkForTransformResponse(data, cfg.responseTransform);
 
     let response;
     if (cfg.saveReceivedData && process.env.ELASTICIO_PUBLISH_MESSAGES_TO) {
       response = { data, receivedData: msg.body }
     } else if (cfg.saveReceivedData) {
       response = { data, receivedData: msg.data }
+    } else if (cfg.responseTransform) {
+      response = { data, transformedResponse };
     } else {
       response = data;
     }
@@ -41,7 +38,6 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
     return;
   } catch (e) {
     self.logger.info('Error while making request to SOAP Client: ', (e as Error).message);
-    console.log(JSON.stringify(e))
     const reboundErrorCodes = cfg.httpReboundErrorCodes ? new Set(cfg.httpReboundErrorCodes) : DEFAULT_HTTP_ERROR_CODE_REBOUND;
     const err = e as AxiosError & { message?: string };
     const { response, message = '', config } = err;
