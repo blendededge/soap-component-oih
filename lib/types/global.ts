@@ -27,7 +27,7 @@ export interface Config {
     enableRebound?: boolean;
     httpReboundErrorCodes?: number[];
     rateLimitInMs?: number;
-    faultTransform?: string;
+    responseTransform?: string;
 }
 
 export interface Namespace {
@@ -84,11 +84,3 @@ export interface Logger {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Self = any;
-
-export class SOAPFault extends Error {
-    fault: string;
-    constructor(message: string | undefined, fault: string) {
-        super(message);
-        this.fault = fault;
-    }
-}
