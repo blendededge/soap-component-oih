@@ -25,6 +25,8 @@ The following is a complete list of configuration fields that are available on t
 
 - **`httpReboundErrorCodes`** - An array of numbers representing http status codes to rebound on if `enableRebound` is set to `true`. Will override the default http response codes.
 
+- **`logResponseHash`** - If set to `true` it will log an md5 hash of the SOAP response at the `info` log level. If set to `false` or not present the hashing step is skipped.
+
 - **`namespaces`** - An array of objects with `name` and `url`. This allows you to add additional namespaces to the SOAP envelope. Ex:
     ```
     config
