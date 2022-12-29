@@ -27,7 +27,7 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
         const hash = createHash('md5').update(data).digest('hex');
         self.logger.info(`SOAP response hash: ${hash}`)
       } catch (e) {
-        self.logger.error('Unable to hash SOAP response data');
+        self.logger.error(`Unable to hash SOAP response data: ${e}`);
       }
     }
     if (cfg.saveReceivedData) {
