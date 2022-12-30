@@ -27,6 +27,7 @@ export interface Config {
     enableRebound?: boolean;
     httpReboundErrorCodes?: number[];
     rateLimitInMs?: number;
+    logResponseHash?: boolean;
 }
 
 export interface Namespace {

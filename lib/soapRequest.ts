@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import axios, { AxiosError } from 'axios';
 import { rateLimit } from './helper';
 import { newMessage } from './messages';
@@ -20,6 +21,15 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
       headers: formattedHeaders,
     });
     self.logger.debug(`Response: ${data}`);
+    self.logger.info(`SOAP response length: ${data.length}`);
+    if (cfg.logResponseHash) {
+      try {
+        const hash = createHash('md5').update(data).digest('hex');
+        self.logger.info(`SOAP response hash: ${hash}`)
+      } catch (e) {
+        self.logger.error(`Unable to hash SOAP response data: ${e}`);
+      }
+    }
     if (cfg.saveReceivedData) {
       const response = process.env.ELASTICIO_PUBLISH_MESSAGES_TO ? { data, receivedData: msg.body } : { data, receivedData: msg.data }
       await self.emit('data', newMessage(response));
