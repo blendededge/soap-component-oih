@@ -2,7 +2,8 @@ import { AxiosRequestHeaders } from 'axios';
 import { populateAuthHeaders } from './http';
 import { getAuthFromSecretConfig } from './secret';
 import { transform } from '@openintegrationhub/ferryman';
-import { Config, Self, Headers, Auth, Message, Namespace } from './types/global';
+import { Self, Headers, Auth, Message, Namespace } from './types/global';
+import { Config } from '@blendededge/ferryman-extensions/lib/ferryman-types';
 
 export function createRequest(cfg: Config, self: Self, msg: Message) {
     const { endpointUrl, soapAction, httpHeaders, soapHeaders } = cfg;
@@ -52,7 +53,7 @@ function createRequestHeaders(self: Self, bearerToken: string, soapAction?: stri
 }
 
 function formatHeaders(requestHeaders: Headers[]) {
-    const formattedHeaders: AxiosRequestHeaders = {};
+    const formattedHeaders: AxiosRequestHeaders = Object.create(null);
     if (requestHeaders && requestHeaders.length) {
       requestHeaders.forEach(header => {
         if (!header.key || !header.value) {
