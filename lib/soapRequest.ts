@@ -3,7 +3,8 @@ import axios, { AxiosError } from 'axios';
 import { rateLimit } from './helper';
 import { newMessage } from './messages';
 import { createRequest } from './soap';
-import { Config, GenericObject, Message, Self } from './types/global';
+import { GenericObject, Message, Self } from './types/global';
+import { Config } from '@blendededge/ferryman-extensions/lib/ferryman-types';
 
 const DEFAULT_HTTP_ERROR_CODE_REBOUND = new Set([408, 423, 429, 500, 502, 503, 504]);
 
@@ -56,7 +57,7 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
     if (cfg.dontThrowErrorFlag && config) {
       self.logger.info('Component error: %o', e);
       self.logger.info('dontThrowErrorFlag set, sending to next step')
-      const msg = newMessage({ errorMessage: err.message, errorName: err.name, originalRequest: err.config.data });
+      const msg = newMessage({ errorMessage: err.message, errorName: err.name, originalRequest: err?.config?.data });
       await self.emit('data', msg);
       await emitEnd(self, rateLimitDelay);
       return;

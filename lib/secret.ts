@@ -1,4 +1,5 @@
-import { Auth, Config, Self, AuthTypes } from './types/global';
+import { Config } from '@blendededge/ferryman-extensions/lib/ferryman-types';
+import { Auth, Self, AuthTypes } from './types/global';
 import { transform } from '@openintegrationhub/ferryman';
 
 export function getAuthFromSecretConfig(cfg: Config, self: Self) {
