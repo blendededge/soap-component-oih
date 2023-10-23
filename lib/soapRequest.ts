@@ -15,10 +15,12 @@ async function emitEnd(self: Self, delay: number): Promise<void> {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function processMethod(self: Self, msg: Message, cfg: Config, snapshot?: GenericObject) {
-  const { requestData, requestUrl, formattedHeaders } = createRequest(cfg, self, msg);
-  const rateLimitDelay = cfg.rateLimitInMs ?? 0;
+  let rateLimitDelay;
   try {
-    const { data } = await axios.post(requestUrl, requestData, {
+    self.logger.info('Starting SOAP request');
+    const { requestData, requestUrl, formattedHeaders } = createRequest(cfg, self, msg);
+    rateLimitDelay = cfg.rateLimitInMs ?? 0;
+      const { data } = await axios.post(requestUrl, requestData, {
       headers: formattedHeaders,
     });
     self.logger.debug(`Response: ${data}`);
@@ -40,6 +42,7 @@ export async function processMethod(self: Self, msg: Message, cfg: Config, snaps
 
     await self.emit('data', newMessage(data));
     await emitEnd(self, rateLimitDelay);
+    self.logger.info('SOAP request finished');
     return;
   } catch (e) {
     self.logger.info('Error while making request to SOAP Client: ', (e as Error).message);
