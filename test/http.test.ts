@@ -15,10 +15,10 @@ describe('populateAuthHeaders', () => {
         }
         const headers = populateAuthHeaders(auth, this, bearerToken);
         expect(headers[0].key).to.equal('Authorization')
-        expect(headers[0].value).to.equal(`"Basic ${Buffer.from(
+        expect(headers[0].value).to.equal(`Basic ${Buffer.from(
             `${auth.basic.username}:${auth.basic.password}`,
             'utf8',
-          ).toString('base64')}"`)
+          ).toString('base64')}`)
     })
 
     it('should populate headers for api key', () => {
@@ -31,7 +31,7 @@ describe('populateAuthHeaders', () => {
         }
         const headers = populateAuthHeaders(auth, this, bearerToken);
         expect(headers[0].key).to.equal('dragon')
-        expect(headers[0].value).to.equal('"nighthawk"')
+        expect(headers[0].value).to.equal('nighthawk')
     })
 
     it('should populate headers for oauth', () => {
@@ -47,6 +47,6 @@ describe('populateAuthHeaders', () => {
         }
         const headers = populateAuthHeaders(auth, self, bearerToken);
         expect(headers[0].key).to.equal('Authorization')
-        expect(headers[0].value).to.equal(`"Bearer ${bearerToken}"`);
+        expect(headers[0].value).to.equal(`Bearer ${bearerToken}`);
     })
 })

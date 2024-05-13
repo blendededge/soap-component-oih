@@ -10,17 +10,17 @@ export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string,
       case AuthTypes.BASIC:
           newHeaders.push({
           key: 'Authorization',
-          value: `"Basic ${Buffer.from(
+          value: `Basic ${Buffer.from(
             `${auth.basic?.username}:${auth.basic?.password}`,
             'utf8',
-          ).toString('base64')}"`,
+          ).toString('base64')}`,
         });
         break;
 
       case AuthTypes.API_KEY:
           newHeaders.push({
           key: auth.apiKey?.headerName,
-          value: `"${auth.apiKey?.headerValue}"`,
+          value: `${auth.apiKey?.headerValue}`,
         });
         break;
 
@@ -28,7 +28,7 @@ export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string,
         self.logger.trace('auth = %j', auth);
         newHeaders.push({
           key: 'Authorization',
-          value: `"Bearer ${bearerToken}"`,
+          value: `Bearer ${bearerToken}`,
         });
         break;
 
